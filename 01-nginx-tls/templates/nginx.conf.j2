@@ -1,0 +1,23 @@
+
+server {
+    listen {{ no_tls_port }};
+    root /usr/share/nginx/html;
+    index index.html index.htm;
+    server_name {{ ansible_host }};
+    location / {
+            try_files $uri $uri/ =404;
+    }
+}
+
+server {
+    listen {{ tls_port }} ssl;
+    ssl_certificate {{ cert_dir_path }}/ansible.pem;
+    ssl_certificate_key {{ keys_dir_path }}/ansible.key;
+
+    root /usr/share/nginx/html;
+    index index.html index.htm;
+    server_name {{ ansible_host }};
+    location / {
+            try_files $uri $uri/ =404;
+    }
+}
