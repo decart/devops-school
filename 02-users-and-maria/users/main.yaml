@@ -6,7 +6,7 @@
     - vars/users.yaml
 
   tasks:
-    - name: create users from enctypted file
+    - name: create users from encrypted file
       user:
         name: "{{ user.name }}"
         password: "{{ user.pass | password_hash('sha512') }}"
