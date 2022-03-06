@@ -7,12 +7,12 @@
 
   tasks:
     - name: create users from encrypted file
+      no_log: true
       user:
         name: "{{ user.name }}"
         password: "{{ user.pass | password_hash('sha512') }}"
         comment: "Ansible-generated user"
 
-      no_log: true
       loop: "{{ users }}"
       loop_control:
         loop_var: user
