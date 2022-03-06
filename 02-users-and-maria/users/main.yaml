@@ -1,0 +1,19 @@
+---
+- name: create users
+  hosts: nodes
+  become: true
+  vars_files:
+    - vars/users.yaml
+
+  tasks:
+    - name: create users from enctypted file
+      user:
+        name: "{{ user.name }}"
+        password: "{{ user.pass | password_hash('sha512') }}"
+        comment: "Ansible-generated user"
+
+      no_log: true
+      loop: "{{ users }}"
+      loop_control:
+        loop_var: user
+        pause: 5
