@@ -1,0 +1,3 @@
+---
+cert_dir_path: /etc/ssl
+keys_dir_path: /etc/ssl/private

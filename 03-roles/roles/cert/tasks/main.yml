@@ -1,0 +1,45 @@
+---
+- name: install epel-release for repos with python2-pip
+  yum:
+    name:
+      - epel-release
+    state: present
+
+- name: instal pip
+  yum:
+    name:
+      - python2-pip
+
+- name: upgrade pip
+  pip:
+    name: pip==20.3.4
+
+- name: install python dependencies
+  pip:
+    name: cryptography>=1.2.3
+
+- name: create certificates directory
+  file: 
+    path: "{{ cert_dir_path }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: create keys directory
+  file: 
+    path: "{{ keys_dir_path }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0700
+
+- name: create private key
+  community.crypto.openssl_privatekey:
+    path: "{{ keys_dir_path }}/ansible.key"
+
+- name: create simple self-signed certificate
+  community.crypto.x509_certificate:
+    path: "{{ cert_dir_path }}/ansible.pem"
+    privatekey_path: "{{ keys_dir_path }}/ansible.key"
+    provider: selfsigned

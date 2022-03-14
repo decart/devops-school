@@ -1,0 +1,39 @@
+---
+- name: install nginx and maria db
+  hosts: nodes
+  become: true
+  vars_files:
+    - vars/nginx.yaml
+    - vars/db.yaml
+
+  roles:
+    - role: cert
+      tags: 
+        - cert
+        - nginx
+
+    - role: nginx
+      tags: nginx
+
+    - role: db
+      tags: db
+
+  post_tasks:
+    - name: check web site from control server by http protocol
+      uri:
+        url: "http://{{ ansible_host }}:{{ no_tls_port }}"
+        return_content: true
+      connection: local
+      register: example_webpage_out
+      failed_when: example_webpage_out.status != 200
+      tags: nginx
+
+    - name: check web site from control server by https protocol
+      uri:
+        url: "https://{{ ansible_host }}:{{ tls_port }}"
+        validate_certs: false
+        return_content: true
+      connection: local
+      register: example_webpage_out
+      failed_when: example_webpage_out.status != 200
+      tags: nginx
