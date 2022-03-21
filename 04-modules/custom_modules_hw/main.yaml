@@ -3,7 +3,13 @@
   hosts: localhost
   connection: local
   gather_facts: false
+  vars:
+    mac_address: "48205687642F"
   tasks:
+    - name: mac filter
+      debug:
+        msg: "{{ mac_address | mac }}"
+
     - name: healthcheck py
       healthcheck_py:
         addr: "github.com"
