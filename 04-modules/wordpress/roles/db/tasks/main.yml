@@ -1,0 +1,26 @@
+---
+- name: Install 'mariadb-server' and 'MySQL-python' packages
+  yum:
+    name:
+      - mariadb-server
+      - MySQL-python
+    state: present
+
+- name: Ensure 'mariadb' service is started and enabled
+  service:
+    name: mariadb
+    enabled: true
+    state: started
+
+- name: Create "{{ db_name }}" database
+  mysql_db:
+    name: "{{ db_name }}"
+
+- name: >
+    Create database user "{{ db_password }}" with "{{ db_pass }}"
+    and "{{ db_password }}".*:ALL privelege
+  no_log: true
+  mysql_user:
+    name: "{{ db_user }}"
+    password: "{{ db_password }}"
+    priv: "{{ db_name }}.*:ALL"

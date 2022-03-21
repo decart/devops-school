@@ -1,0 +1,52 @@
+---
+- name: install nginx and maria db
+  hosts: nodes
+  become: true
+  vars_files:
+    - vars/nginx.yaml
+    - vars/db.yaml
+    - vars/wordpress.yaml
+
+  roles:
+    - role: cert
+      tags:
+        - cert
+        - nginx
+
+    - role: nginx
+      tags: nginx
+
+    - role: db
+      vars:
+        db_user: "{{ wp_db_user }}"
+        db_password: "{{ wp_db_password }}"
+        db_name: "{{ wp_db_name }}"
+      tags: db
+
+    - role: wordpress
+      vars:
+        server_hostname: "{{ ansible_host }}"
+        cert_path: "{{ cert_dir_path }}/ansible.pem"
+        privatekey_path: "{{ keys_dir_path }}/ansible.key"
+      tags: wordpress
+
+  post_tasks:
+    - name: check web site redirect by http protocol
+      uri:
+        url: "http://{{ ansible_host }}:{{ no_tls_port }}"
+        follow_redirects: "no"
+        return_content: true
+      connection: local
+      register: example_webpage_out
+      failed_when: example_webpage_out.status != 301
+      tags: nginx
+
+    - name: check web site from control server by https protocol
+      uri:
+        url: "https://{{ ansible_host }}:{{ tls_port }}"
+        validate_certs: false
+        return_content: true
+      connection: local
+      register: example_webpage_out
+      failed_when: example_webpage_out.status != 200
+      tags: nginx

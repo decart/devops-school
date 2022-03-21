@@ -1,0 +1,5 @@
+---
+# wordpress version and checksum for this version
+# you can choose another at https://wordpress.org/download/releases/
+wp_version: 5.8.2
+wp_checksum: sha1:c3b1b59553eafbf301c83b14c5eeae4cf1c86044

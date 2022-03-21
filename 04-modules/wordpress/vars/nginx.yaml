@@ -1,0 +1,4 @@
+cert_dir_path: /etc/ssl
+keys_dir_path: /etc/ssl/private
+no_tls_port: 80
+tls_port: 443
