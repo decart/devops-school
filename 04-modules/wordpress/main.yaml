@@ -9,26 +9,19 @@
 
   roles:
     - role: cert
-      tags:
-        - cert
-        - nginx
-
     - role: nginx
-      tags: nginx
-
     - role: db
       vars:
         db_user: "{{ wp_db_user }}"
         db_password: "{{ wp_db_password }}"
         db_name: "{{ wp_db_name }}"
-      tags: db
 
+    - role: php
     - role: wordpress
       vars:
         server_hostname: "{{ ansible_host }}"
         cert_path: "{{ cert_dir_path }}/ansible.pem"
         privatekey_path: "{{ keys_dir_path }}/ansible.key"
-      tags: wordpress
 
   post_tasks:
     - name: check web site redirect by http protocol
@@ -39,7 +32,6 @@
       connection: local
       register: example_webpage_out
       failed_when: example_webpage_out.status != 301
-      tags: nginx
 
     - name: check web site from control server by https protocol
       uri:
@@ -49,4 +41,3 @@
       connection: local
       register: example_webpage_out
       failed_when: example_webpage_out.status != 200
-      tags: nginx
