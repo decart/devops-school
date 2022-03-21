@@ -1,0 +1,15 @@
+---
+- name: Check site's availability
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: healthcheck py
+      healthcheck_py:
+        addr: "github.com"
+        tls: false
+
+    - name: healthcheck py
+      healthcheck_sh:
+        addr: "github.com"
+        tls: false
