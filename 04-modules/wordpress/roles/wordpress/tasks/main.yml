@@ -25,6 +25,7 @@
     owner: root
     group: root
     mode: 0644
+  notify: restart php
 
 - name: >
     Download WordPress from http://wordpress.org/wordpress-{{ wp_version }}.tar.gz

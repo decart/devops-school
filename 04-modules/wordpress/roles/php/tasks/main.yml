@@ -16,3 +16,9 @@
     name: "{{ php_packages_list }}"
     update_cache: true
     state: present
+
+- name: Start php-fpm srvice
+  service:
+    name: php-fpm
+    enabled: true
+    state: restarted
