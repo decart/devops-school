@@ -10,7 +10,7 @@ def mac(val):
     if not isinstance(val, str):
         raise AnsibleFilterTypeError("TypeError. Input value must be a sting")
 
-    if re.search('[\da-f]{12}', val, re.IGNORECASE) == None:
+    if re.search('^[\da-f]{12}$', val, re.IGNORECASE) == None:
         raise AnsibleFilterTypeError(
             "TypeError. Input value has a wrong format")
 
