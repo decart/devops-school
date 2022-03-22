@@ -7,12 +7,15 @@ tls=$(cat $1 | grep -Po '(?<="tls": )(.*?)(?=,)')
 booleans=("y" "yes" "n" "no" "on" "off" "true" "false" "1" "0")
 is_boolean=$(printf '%s\n' \"${booleans[@]}\" | grep -F -x "$tls")
 
+truthly=("y" "yes" "on" "true" "1")
+is_true=$(printf '%s\n' \"${truthly[@]}\" | grep -F -x "$tls")
+
 if [[ ! $is_boolean ]]; then
     echo "{ \"failed\": true, \"site_status\": \"\", \"rc\": 1, \"msg\": \"TypeError: tls must has a boolean type\" }"
     exit 1
 fi;
 
-[[ $tls = "true" ]] && protocol="https" || protocol="http"
+[[ $is_true ]] && protocol="https" || protocol="http"
 
 url="$protocol://$addr"
 failed="false"
